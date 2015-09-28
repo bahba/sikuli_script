@@ -1,0 +1,157 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>cadmin_test.sikuli\cadmin_test.sikuli</h2> <a href="cadmin_test.sikuli\cadmin_test.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="kw">import</span> time;
+
+networks = [<span class="str">'cadmin'</span>, <span class="str">'1234'</span>, <span class="str">'net work name'</span>, <span class="str">'!#%.,_'</span>]
+devices = [<span class="str">'online'</span>, <span class="str">'offline'</span>, <span class="str">'device'</span>]
+
+<span class="cmt">###### open App ######
+</span><span class="kw">print</span> <span class="str">"--open app--"</span>
+myApp = App(<span class="str">"cadmin"</span>)
+<span class="cmt">#if App.open(myApp):
+</span><span class="cmt">#    print "im up"
+</span>
+reg = Region(Screen.getBounds(Screen(<span class="dig">0</span>)))
+<span class="kw">print</span> <span class="str">"reg.getTopLeft(): "</span>, reg.getTopLeft()
+
+<span class="cmt">#pattern().similar.(0.8).anyColor().anySize()
+</span><span class="kw">if</span> <span class="kw">not</span> exists(<img src="1435695722164.png" />):
+    App.open(<span class="str">"C:\\Program Files (x86)\\Tutus\\CAdmin\\cadmin.exe"</span>)
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    myApp.focus()
+    splashScreen = App.focusedWindow()
+    time.<span class="skw">sleep</span>(<span class="dig">3</span>)
+    myApp = App.focusedWindow()
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">print</span> <span class="str">"myApp: "</span>, myApp
+<span class="kw">else</span>:
+    <span class="kw">print</span> <span class="str">"else"</span>
+    <span class="skw">find</span>(<img src="1435695722164.png" />).highlight(<span class="dig">1</span>)
+    <span class="skw">click</span>(<img src="1435695722164.png" />)
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">print</span> <span class="str">"clicked"</span>
+<span class="cmt">#if find("1435753753369.png"):
+</span><span class="cmt">#print "not exists login page"
+</span><span class="cmt">#click("1435695722164.png")        
+</span><span class="skw">wait</span>(<span class="dig">1</span>)
+
+<span class="cmt">###### add network ######
+</span><span class="kw">print</span> <span class="str">"--Add network--"</span>
+<span class="skw">click</span>(<img src="1435753911188.png" />)
+<span class="skw">type</span> (Key.DOWN)
+<span class="skw">type</span> (Key.ENTER)
+
+i = <span class="dig">0</span>
+<span class="kw">while</span> exists(<img src="1435688533049.png" />) <span class="kw">and</span> i &lt; len(networks):
+    <span class="kw">print</span> <span class="str">"i: "</span>, i
+    <span class="kw">print</span> <span class="str">"len(networks): "</span>, len(networks)
+    <span class="kw">for</span> network <span class="kw">in</span> networks:
+        <span class="kw">print</span> <span class="str">"network: "</span>, network
+        <span class="kw">print</span> <span class="str">"i: "</span> , i
+        <span class="skw">click</span>(<img src="1435688561633.png" />)
+        <span class="skw">type</span>(<img src="1435689848501.png" />, network)
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+        <span class="skw">click</span>(<img src="1435700914588.png" />)
+        i = i+<span class="dig">1</span>
+        <span class="kw">print</span> <span class="str">"i: "</span>, i
+<span class="skw">click</span>(<img src="1435784806314.png" />)
+
+<span class="cmt">###### add device ######
+</span><span class="kw">print</span> <span class="str">"--add device--"</span>
+<span class="skw">wait</span>(<span class="dig">1</span>)
+<span class="skw">click</span>(<img src="1435753911188-1.png" />)
+<span class="skw">type</span>(Key.DOWN)
+<span class="skw">type</span>(Key.DOWN)
+<span class="skw">type</span>(Key.ENTER)
+<span class="cmt">#click("1435757222352.png")
+</span>
+i = <span class="dig">0</span>
+<span class="kw">while</span> exists(<img src="1435776135971.png" />) <span class="kw">and</span> i &lt; len(devices):
+    <span class="kw">print</span> <span class="str">"i: "</span>, i
+    <span class="kw">print</span> <span class="str">"len(devices): "</span>, len(devices)
+    <span class="kw">for</span> device <span class="kw">in</span> devices:
+        <span class="kw">print</span> <span class="str">"device: "</span>, device
+        <span class="kw">print</span> <span class="str">"i: "</span>, i
+        <span class="skw">type</span>(device)
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+        <span class="skw">click</span>(<img src="1435756869777.png" />)
+        <span class="skw">type</span>(Key.DOWN)
+        <span class="skw">type</span>(Key.ENTER)
+        <span class="skw">click</span>(<img src="1435756929018.png" />)
+        i = i+<span class="dig">1</span>
+        <span class="kw">print</span> <span class="str">"i: "</span>, i
+
+<span class="cmt">#    "1435694432835.png"</span>
+</pre>
+</body>
+</html>
