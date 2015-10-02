@@ -1,82 +1,82 @@
 import time;
 
+###### define variables and patterns used ######
 networks = ['cadmin', '1234', 'net work name', '!#%.,_']
 devices = ['online', 'offline', 'device']
 
-###### open App ######
-print "--open app--"
-myApp = App("cadmin")
-#if App.open(myApp):
-#    print "im up"
 
-reg = Region(Screen.getBounds(Screen(0)))
-print "reg.getTopLeft(): ", reg.getTopLeft()
+### visual dictionary ###
+app = ({"cadmin": "1435695722164.png" })
+menubar = ({ "edit": Pattern("1435753911188.png").similar(0.60) }) 
+actions = ({ "networks": "1443526604930.png", "add_device": "1435757222352.png" })
+menu_open = ({ "edit": "1443517775071.png"})
+buttons = ({ "n_new_name_ok": "1443612344043.png", "n_add": "1435688561633.png", "n_add_ok": "1435700914588.png", "d_add_ok": "1435756929018.png" })
+dialogs = ({ "main": "1443522369700.png", "network": "1435688533049.png", "n_new_name": "1435689848501.png", "add_device": "1435776135971.png"})
+dev_type = ({ "farist3": "1435756869777.png", "farist4": "1443691985751.png", "combo": "1443692271269.png", "combo_farist3": "1443692478591.png" })
 
-#pattern().similar.(0.8).anyColor().anySize()
-if not exists("1435695722164.png"):
-    App.open("C:\\Program Files (x86)\\Tutus\\CAdmin\\cadmin.exe")
-    wait(1)
-    myApp.focus()
-    splashScreen = App.focusedWindow()
-    time.sleep(3)
-    myApp = App.focusedWindow()
-    wait(1)
-    print "myApp: ", myApp
-else:
-    print "else"
-    find("1435695722164.png").highlight(1)
-    click("1435695722164.png")
-    wait(1)
-    print "clicked"
-#if find("1435753753369.png"):
-#print "not exists login page"
-#click("1435695722164.png")        
-wait(1)
 
 ###### add network ######
-print "--Add network--"
-click("1435753911188.png")
-type (Key.DOWN)
-type (Key.ENTER)
-
-i = 0
-while exists("1435688533049.png") and i < len(networks):
-    print "i: ", i 
-    print "len(networks): ", len(networks)
-    for network in networks:
-        print "network: ", network
-        print "i: " , i
-        click("1435688561633.png")
-        type("1435689848501.png", network)   
-        wait(1)
-        click("1435700914588.png")
-        i = i+1
-        print "i: ", i
-click("1435784806314.png")
+def addNetwork():
+    print "--Add network--"
+    click(menubar["edit"])
+    find(menu_open["edit"]).find(actions["networks"]).click(actions["networks"])
+    i = 0
+    while exists(dialogs["network"]) and i < len(networks):
+        print "i: ", i 
+        print "len(networks): ", len(networks)
+        for network in networks:
+            print "network: ", network
+            print "i: " , i
+            click(buttons["n_add"])
+            type(dialogs["n_new_name"], network)
+            wait(1)
+            find(dialogs["n_new_name"]).find(buttons["n_new_name_ok"]).click(buttons["n_new_name_ok"])
+            i = i+1
+            print "i: ", i            
+    click(buttons["n_add_ok"])
 
 ###### add device ######
-print "--add device--"
-wait(1)
-click("1435753911188-1.png")
-type(Key.DOWN)
-type(Key.DOWN)
-type(Key.ENTER)
-#click("1435757222352.png")
-
-i = 0
-while exists("1435776135971.png") and i < len(devices):
-    print "i: ", i    
-    print "len(devices): ", len(devices)
-    for device in devices:
-        print "device: ", device
-        print "i: ", i
-        type(device)
-        wait(1)
-        click("1435756869777.png")
-        type(Key.DOWN)
-        type(Key.ENTER)
-        click("1435756929018.png")
-        i = i+1        
-        print "i: ", i
-
+def addDevice():
+    print "--add device--"
+#    click(menubar["edit"])
+#    find(menu_open["edit"]).find(actions["add_device"]).click(actions["add_device"])
+    i = 0
+    while exists(menubar["edit"]) and i < len(devices):
+        #dialogs["add_device"]
+        click(menubar["edit"])
+        find(menu_open["edit"]).find(actions["add_device"]).click(actions["add_device"])
+        print "i: ", i    
+        print "len(devices): ", len(devices)
+        for device in devices:
+            print "device: ", device
+            print "i: ", i
+            type(device)
+            wait(1)
+            if not find(dev_type["farist3"]):
+                find(dev_type["farist4"]).click(dev_type["farist4"]).find(dev_type["combo"]).click(dev_type["combo_farist3"])
+            else: 
+                click(dev_type["farist3"])
+                click(dev_type["farist3"])
+            i = i+1        
+            print "i: ", i
+            click(buttons["d_add_ok"])
+            break
+#            Region(dialogs["add_device"]).inside().find(dialogs["add_device"]).click(buttons["d_add_ok"])
 #    "1435694432835.png"
+
+
+###### script start ######
+print ("cadmin_test.sikuli script running")
+cadmin = App("C:\\Program Files (x86)\\Tutus\\CAdmin\\cadmin.exe")
+#cadmin = App.open("C:\\Program Files (x86)\\Tutus\\CAdmin\\cadmin.exe")
+if not cadmin.window():
+    cadmin.open()
+wait(5)
+cadmin.focus()
+with Region(cadmin.window()):
+    #onAppear(cadmin.window(), addNetwork())
+    addNetwork()
+    #onAppear(dialogs["main"], addDevice())
+    addDevice()
+cadmin.close()
+
