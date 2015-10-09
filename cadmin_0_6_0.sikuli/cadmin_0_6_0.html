@@ -1,0 +1,209 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>cadmin_test.sikuli\cadmin_test.sikuli</h2> <a href="cadmin_test.sikuli\cadmin_test.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+﻿<span class="kw">import</span> time;
+
+Settings.OcrTextSearch = True
+
+<img src="1444146003908.png" />
+
+<span class="cmt">###### define variables and patterns used ######
+</span>networks = [<span class="str">'cadmin'</span>, <span class="str">'1234'</span>, <span class="str">'net work name'</span>, <span class="str">'!#%.,_'</span>]
+devices = [<span class="str">'online'</span>, <span class="str">'offline'</span>, <span class="str">'device'</span>]
+status = ({ <span class="str">'ON'</span>: <span class="dig">1</span>, <span class="str">'OFF'</span>: <span class="dig">0</span> })
+
+
+
+<span class="cmt">### visual dictionary ###
+</span>app = ({<span class="str">"cadmin"</span>: <img src="1435695722164.png" /> })
+menubar = ({ <span class="str">"edit"</span>: <img src="1435753911188.png" /> })
+toolbar = ({ <span class="str">"offline"</span>: <img src="1443959400381.png" />, <span class="str">"online"</span>: <span class="str">""</span> })
+actions = ({ <span class="str">"networks"</span>: <img src="1443526604930.png" />, <span class="str">"add_device"</span>: <img src="1435757222352.png" />, <span class="str">"manage_networks"</span>: <img src="1444134363912.png" /> })
+menu_open = ({ <span class="str">"edit"</span>: <img src="1443517775071.png" />})
+buttons = ({ <span class="str">"n_new_name_ok"</span>: <img src="1443612344043.png" />, <span class="str">"n_add"</span>: <img src="1435688561633.png" />, <span class="str">"n_add_ok"</span>: <img src="1435700914588.png" />, <span class="str">"d_add_ok"</span>: <img src="1435756929018.png" /> })
+dialogs = ({ <span class="str">"main"</span>: <img src="1443522369700.png" />, <span class="str">"network"</span>: <img src="1435688533049.png" />, <span class="str">"n_new_name"</span>: <img src="1435689848501.png" />, <span class="str">"add_device"</span>: <img src="1435776135971.png" />, <span class="str">"manage_devices"</span>: Pattern(<img src="1444134446816.png" />).similar(<span class="dig">0.50</span>)})
+dev_type = ({ <span class="str">"farist3"</span>: <img src="1435756869777.png" />, <span class="str">"farist4"</span>: <img src="1443691985751.png" />, <span class="str">"combo"</span>: <img src="1443692271269.png" />, <span class="str">"combo_farist3"</span>: <img src="1443692478591.png" /> })
+dev_property = ({ <span class="str">"cert_cn"</span>: <img src="1444135626140.png" /> })
+arrows = ({<span class="str">"left"</span>: <img src="1444138387854.png" /> })
+buttons_manageDevices = ({ <span class="str">"add_delete"</span>: <img src="1444138663093.png" />, <span class="str">"delete"</span>: <img src="1444138696257.png" />, <span class="str">"ok_cancel"</span>: <img src="1444144799590.png" />})
+
+<span class="cmt">###### active app ######
+</span><span class="kw">def</span> appActive(app):
+    <span class="cmt">#self.app = app
+</span>    searchResult = App.focus(app)
+    <span class="kw">print</span>(<span class="str">"searchResult: "</span> + str(searchResult))
+    <span class="kw">if</span> (app <span class="kw">in</span> str(searchResult)):
+        <span class="kw">return</span> <span class="str">'True'</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> <span class="str">'False'</span>
+
+<span class="cmt">###### add network ######
+</span><span class="kw">def</span> addNetwork():
+    <span class="kw">print</span> <span class="str">"--Add network--"</span>
+    <span class="skw">find</span>(menubar[<span class="str">"edit"</span>]).<span class="skw">click</span>(menubar[<span class="str">"edit"</span>])
+    <span class="skw">find</span>(menu_open[<span class="str">"edit"</span>]).<span class="skw">find</span>(actions[<span class="str">"networks"</span>]).<span class="skw">click</span>(actions[<span class="str">"networks"</span>])
+    i = <span class="dig">0</span>
+    <span class="kw">while</span> exists(dialogs[<span class="str">"network"</span>]) <span class="kw">and</span> i &lt; len(networks):
+        <span class="kw">for</span> network <span class="kw">in</span> networks:
+            <span class="skw">click</span>(buttons[<span class="str">"n_add"</span>])
+            <span class="skw">type</span>(dialogs[<span class="str">"n_new_name"</span>], network)
+            <span class="skw">wait</span>(<span class="dig">0.5</span>)
+            <span class="skw">find</span>(dialogs[<span class="str">"n_new_name"</span>]).<span class="skw">find</span>(buttons[<span class="str">"n_new_name_ok"</span>]).<span class="skw">click</span>(buttons[<span class="str">"n_new_name_ok"</span>])
+            i = i+<span class="dig">1</span>
+    <span class="skw">find</span>(buttons[<span class="str">"n_add_ok"</span>]).<span class="skw">click</span>(buttons[<span class="str">"n_add_ok"</span>])
+
+<span class="cmt">###### add device ######
+</span><span class="kw">def</span> addDevice():
+    <span class="kw">print</span> <span class="str">"--add device--"</span>
+    i = <span class="dig">0</span>
+    <span class="kw">while</span> exists(menubar[<span class="str">"edit"</span>]) <span class="kw">and</span> i &lt; len(devices):
+        <span class="kw">for</span> device <span class="kw">in</span> devices:
+            <span class="skw">find</span>(menubar[<span class="str">"edit"</span>]).<span class="skw">click</span>(menubar[<span class="str">"edit"</span>])
+            <span class="skw">find</span>(menu_open[<span class="str">"edit"</span>]).<span class="skw">find</span>(actions[<span class="str">"add_device"</span>]).<span class="skw">click</span>(actions[<span class="str">"add_device"</span>])
+            <span class="skw">type</span>(dialogs[<span class="str">"add_device"</span>], device)
+            <span class="skw">wait</span>(<span class="dig">0.5</span>)
+            <span class="kw">if</span> <span class="kw">not</span> <span class="skw">find</span>(dev_type[<span class="str">"farist3"</span>]):
+                <span class="skw">find</span>(dev_type[<span class="str">"farist4"</span>]).<span class="skw">click</span>(dev_type[<span class="str">"farist4"</span>]).<span class="skw">find</span>(dev_type[<span class="str">"combo"</span>]).<span class="skw">click</span>(dev_type[<span class="str">"combo_farist3"</span>])
+            <span class="kw">else</span>:
+                <span class="skw">click</span>(dev_type[<span class="str">"farist3"</span>])
+                <span class="skw">click</span>(dev_type[<span class="str">"farist3"</span>])
+            i = i+<span class="dig">1</span>
+            <span class="skw">find</span>(buttons[<span class="str">"d_add_ok"</span>]).<span class="skw">click</span>(buttons[<span class="str">"d_add_ok"</span>])
+
+<span class="cmt">#           Region(dialogs["add_device"]).inside().find(dialogs["add_device"]).click(buttons["d_add_ok"])
+</span><span class="cmt">#    "1435694432835.png"
+</span>
+<span class="cmt">###### remove device ######
+</span><span class="kw">def</span> removeDevice():
+    <span class="kw">print</span> <span class="str">"--remove device--"</span>
+    <span class="skw">find</span>(menubar[<span class="str">"edit"</span>]).<span class="skw">click</span>(menubar[<span class="str">"edit"</span>])
+    <span class="skw">find</span>(menu_open[<span class="str">"edit"</span>]).<span class="skw">find</span>(actions[<span class="str">"manage_networks"</span>]).<span class="skw">click</span>(actions[<span class="str">"manage_networks"</span>])
+    i = <span class="dig">0</span>
+    <span class="kw">while</span> exists(dialogs[<span class="str">"manage_devices"</span>]) <span class="kw">and</span> i &lt; len(devices):
+        <span class="kw">for</span> device <span class="kw">in</span> devices:
+            <span class="kw">if</span> <span class="kw">not</span> exists(device):
+                <span class="kw">print</span>(<span class="str">"Device: "</span> + str(device) + <span class="str">", not found\n"</span>)
+                <span class="kw">return</span>
+            <span class="kw">elif</span> exists(device):
+                <span class="skw">find</span>(device).<span class="skw">click</span>(device)
+                <span class="skw">find</span>(arrows[<span class="str">"left"</span>]).<span class="skw">click</span>(arrows[<span class="str">"left"</span>])
+                <span class="kw">print</span>(<span class="str">"device moved from Network"</span>)
+            <span class="skw">find</span>(device).<span class="skw">click</span>(device)
+            <span class="skw">find</span>(buttons_manageDevices[<span class="str">"delete"</span>]).<span class="skw">click</span>(buttons_manageDevices[<span class="str">"delete"</span>])
+            <span class="cmt"># if exists(device):
+</span>                <span class="cmt"># print("Failed to remove device: " + device)
+</span>            <span class="cmt"># else:
+</span>                <span class="cmt"># print("device: " + device + "successfully removed")
+</span>            i = i+<span class="dig">1</span>
+
+
+<span class="cmt">###### toggle online/offline status ######
+</span><span class="kw">def</span> toggleStatus(status):
+    <span class="kw">if</span> exists(dialogs[<span class="str">"main"</span>]):
+        <span class="kw">if</span> (status == <span class="str">'ON'</span>) <span class="kw">and</span> exists(toolbar[<span class="str">"offline"</span>]):
+            <span class="skw">click</span>(toolbar[<span class="str">"offline"</span>])
+            <span class="kw">print</span>(<span class="str">"status: "</span> + status)
+        <span class="kw">elif</span> (status == <span class="str">'OFF'</span>) <span class="kw">and</span> exists(toolbar[<span class="str">"online"</span>]):
+            <span class="skw">click</span>(toolbar[<span class="str">"online"</span>])
+            <span class="kw">print</span>(<span class="str">"status: "</span> + status)
+        <span class="kw">elif</span> ()
+        <span class="kw">elif</span> <span class="kw">not</span> exists(dialogs[<span class="str">"main"</span>]):
+                switchApp(cadmin)
+                <span class="kw">print</span>(<span class="str">"switchApp testing"</span>)
+
+<span class="cmt">###### begin test sequence ######
+</span><span class="kw">def</span> initTestSequence():
+    <span class="cmt"># addNetwork()
+</span>    <span class="cmt"># addDevice()
+</span>    toggleStatus(<span class="str">'ON'</span>)
+    removeDevice()
+
+<span class="cmt">###### script start ######
+</span><span class="kw">print</span> (<span class="str">"\ncadmin_test.sikuli script running\n"</span>)
+cadmin = App(<span class="str">"C:\\Program Files (x86)\\Tutus\\CAdmin\\cadmin.exe"</span>)
+<span class="cmt"># cadmin = switchApp("C:\\Program Files (x86)\\Tutus\\CAdmin\\cadmin.exe")
+</span>cadmin = cadmin.open()
+
+<span class="kw">if</span> exists(app[<span class="str">"cadmin"</span>]) <span class="kw">and</span> <span class="kw">not</span> exists(dialogs[<span class="str">"main"</span>]):
+        <span class="skw">find</span>(app[<span class="str">"cadmin"</span>]).<span class="skw">click</span>(app[<span class="str">"cadmin"</span>])
+        onAppear(dialogs[<span class="str">"main"</span>], initTestSequence())
+<span class="kw">elif</span> exists(dialogs[<span class="str">"main"</span>]):
+    initTestSequence()
+<span class="kw">else</span>:
+    <span class="kw">print</span>(<span class="str">"\nCould not find CAdmin application\n"</span>)
+
+<span class="kw">print</span>(<span class="str">"Done!"</span>)
+<span class="cmt"># cadmin.close()
+</span><span class="cmt"># wait(dialogs["main"], 5)</span>
+</pre>
+</body>
+</html>
