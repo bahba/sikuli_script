@@ -2,6 +2,7 @@
 import os;
 
 Settings.OcrTextSearch = True
+Settings.MinSimilarity = 0.50
 
 ###### define variables and patterns used ######
 networks = ['cadmin', '1234', 'net work name', '!#%.,_']
@@ -11,19 +12,52 @@ devices_to_delete = ['online', 'device']
 
 
 ### visual dictionary ###
+# app = ({"cadmin": Pattern("imgs\\1435695722164.png").similar(0.50) })
+# menubar = ({ "edit": Pattern("imgs\\1435753911188.png").similar(0.50)
+    # , "window": Pattern("imgs\\1444390827151.png").similar(0.50) })
+# toolbar = ({ "offline": Pattern("imgs\\1443959400381.png").similar(0.50)
+    # , "online": Pattern("imgs\\1444146003908.png").similar(0.50) })
+# actions = ({ "networks": Pattern("imgs\\1443526604930.png").similar(0.50)
+    # , "add_device": Pattern("imgs\\1435757222352.png").similar(0.50)
+    # , "manage_networks": Pattern("imgs\\1444134363912.png").similar(0.50) })
+# menu_open = ({ "edit": Pattern("imgs\\1443517775071.png").similar(0.50)
+    # , "window": Pattern("imgs\\1444390974327.png").similar(0.50)})
+# buttons = ({ "n_new_name_ok": Pattern("imgs\\1443612344043.png").similar(0.50)
+    # , "n_add": Pattern("imgs\\1435688561633.png").similar(0.50)
+    # , "n_add_ok": Pattern("imgs\\1435700914588.png").similar(0.50)
+    # , "d_add_ok": Pattern("imgs\\1435756929018.png").similar(0.50) })
+# dialogs = ({ "main": Pattern("imgs\\1443522369700.png").similar(0.50)
+    # , "network": Pattern("imgs\\1435688533049.png").similar(0.50)
+    # , "n_new_name": Pattern("imgs\\1435689848501.png").similar(0.50)
+    # , "add_device": Pattern("imgs\\1435776135971.png").similar(0.50)
+    # , "manage_devices": Pattern("imgs\\1444134446816.png").similar(0.50)})
+# dev_type = ({ "farist3": Pattern("imgs\\1435756869777.png").similar(0.50)
+    # , "farist4": Pattern("imgs\\1443691985751.png").similar(0.50)
+    # , "combo": Pattern("imgs\\1443692271269.png").similar(0.50)
+    # , "combo_farist3": Pattern("imgs\\1443692478591.png").similar(0.50) })
+# dev_property = ({ "cert_cn": Pattern("imgs\\1444135626140.png").similar(0.50) })
+# arrows = ({"left": Pattern("imgs\\1444138387854.png").similar(0.50) })
+# buttons_manageDevs = ({ "add_delete": Pattern("imgs\\1444138663093.png").similar(0.50)
+    # , "delete": Pattern("imgs\\1444138696257.png").similar(0.50)
+    # , "ok_cancel": Pattern("imgs\\1444144799590.png").similar(0.50)})
+
+    # "1444469331160.png"
 app = ({"cadmin": "imgs\\1435695722164.png" })
-menubar = ({ "edit": "imgs\\1435753911188.png" })
+menubar = ({ "edit": "imgs\\1435753911188.png"
+    , "window": "imgs\\1444390827151.png"})
 toolbar = ({ "offline": "imgs\\1443959400381.png"
     , "online": "imgs\\1444146003908.png" })
 actions = ({ "networks": "imgs\\1443526604930.png"
     , "add_device": "imgs\\1435757222352.png"
     , "manage_networks": "imgs\\1444134363912.png" })
-menu_open = ({ "edit": "imgs\\1443517775071.png"})
+    # , "window": "imgs\\1444390974327.png" })
+menu_open = ({ "edit": "imgs\\1443517775071.png"
+    , "window": "imgs\\1444390974327.png" })
 buttons = ({ "n_new_name_ok": "imgs\\1443612344043.png"
     , "n_add": "imgs\\1435688561633.png"
     , "n_add_ok": "imgs\\1435700914588.png"
     , "d_add_ok": "imgs\\1435756929018.png" })
-dialogs = ({ "main": "imgs\\1443522369700.png"
+dialogs = ({ "main": "imgs\\1444469331160.png"
     , "network": "imgs\\1435688533049.png"
     , "n_new_name": "imgs\\1435689848501.png"
     , "add_device": "imgs\\1435776135971.png"
@@ -37,7 +71,8 @@ arrows = ({"left": "imgs\\1444138387854.png" })
 buttons_manageDevs = ({ "add_delete": "imgs\\1444138663093.png"
     , "delete": "imgs\\1444138696257.png"
     , "ok_cancel": "imgs\\1444144799590.png"})
-# dialog_manageDev = ({ })
+
+    # dialog_manageDev = ({ })
 
 # "1444221751858.png"
 
@@ -53,22 +88,31 @@ def appActive(app):
 
 ###### add network ######
 def addNetwork():
-    print "--Add network--"
-    find(menubar["edit"]).click(menubar["edit"])
-    find(menu_open["edit"]).find(actions["networks"]).click(actions["networks"])
+    print "\n--Add network via menu Edit-networks...--\n"
+    # find(menubar["edit"]).click(menubar["edit"])
+    # find(menu_open["edit"]).find(actions["networks"]).click(actions["networks"])
+    find(menubar["window"]).highlight(2).click(menubar["window"])
+    find(menu_open["window"]).find(actions["networks"]).click(actions["networks"])
     i = 0
+    print("\n1\n")
     while exists(dialogs["network"]) and i < len(networks):
         for network in networks:
+            find(buttons["n_add"]).highlight(2)
             click(buttons["n_add"])
+            print("\n2\n")
             type(dialogs["n_new_name"], network)
+            print("\n3\n")
             wait(0.5)
-            find(dialogs["n_new_name"]).find(buttons["n_new_name_ok"]).click(buttons["n_new_name_ok"])
+            find(dialogs["n_new_name"]).find(buttons["n_new_name_ok"]).highlight(2)
+            click(buttons["n_new_name_ok"])
+            print("\n4\n")
             i = i+1
-    find(buttons["n_add_ok"]).click(buttons["n_add_ok"])
+    find(buttons["n_add_ok"]).highlight(2).click(buttons["n_add_ok"])
+    print("\n5\n")
 
 ###### add device ######
 def addDevice():
-    print "--add device--"
+    print "--add device via menu Edit-add Device...--"
     i = 0
     while exists(menubar["edit"]) and i < len(devices):
         for device in devices:
@@ -156,19 +200,41 @@ def initTestSequence():
     addDevice()
     toggleStatus('ON')
     deleteDevice()
-        
+
+def getMyScreen():
+    myScreen = getScreen()
+    return myScreen
 ###### script start ######
 print ("\ncadmin_test.sikuli script running\n")
 cadmin = App("C:\\Program Files (x86)\\Tutus\\CAdmin\\cadmin.exe")
 cadmin = cadmin.open()
-# wait(app["cadmin"])
-if exists(app["cadmin"]) and not exists(dialogs["main"]):
-	find(app["cadmin"]).click(app["cadmin"])	
-	onAppear(dialogs["main"], initTestSequence())
-elif exists(dialogs["main"]):
+wait(2)
+# onAppear(app["cadmin"], sleep(5))
+# myScreen = getMyScreen()
+# print "myScreen: ", myScreen, "\n"
+# switchApp(cadmin)
+# wait(, 10)
+# if not exists(app["cadmin"])
+# wait(dialogs["main"], 10)
+# onAppear(find(dialogs["main"]))
+# V_0.6.0
+if not exists(app["cadmin"]):
+    wait(2)
+if exists(dialogs["main"]):
     initTestSequence()
+elif not exists(dialogs["main"]) and exists(app["cadmin"]):
+    # wait(dialogs["main"], 10)
+    find(app["cadmin"]).highlight(2).click(app["cadmin"])
+    onAppear(dialogs["main"], initTestSequence())
 else:
     print("\nCould not find CAdmin application\n")
+
+# V_0.5.5
+# if exists(app["cadmin"]) and not exists(dialogs["main"]):
+	# find(app["cadmin"]).click(app["cadmin"])	
+	# onAppear(dialogs["main"], initTestSequence())
+# elif exists(app["cadmin"]) and exists(dialogs["main"]):
+    # initTestSequence()
 	
 print("---script done!")
 cadmin.close()
@@ -176,13 +242,13 @@ cadmin.close()
 
 # during runtime, at every run, this script auto captures an image of the regions searched
 # deleting these images to free up space (optional)
-print("\n---deleting auto-captured images by script---\n")
-imgPath = list(getImagePath())
-for path in imgPath:
-    print "path: ", path
-    for file in os.listdir(path):
-        if file.endswith(".png"):
-            print "file: ", file, " will be deleted!"
-            os.remove(path+file)
-        else:
-            print "no *.png files could be found\n"
+# print("\n---deleting auto-captured images by script---\n")
+# imgPath = list(getImagePath())
+# for path in imgPath:
+    # print "path: ", path
+    # for file in os.listdir(path):
+        # if file.endswith(".png"):
+            # print "file: ", file, " will be deleted!"
+            # os.remove(path+file)
+        # else:
+            # print "no *.png files could be found\n"
